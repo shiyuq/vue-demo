@@ -20,11 +20,10 @@ export default {
   },
   methods: {
     async consult() {
-      this.$store.commit("setSourceId", this.userId);
+      this.$store.commit("setUserId", this.userId);
       this.$store.commit("initMessages");
       const socketClient = new SocketClient(this.gatewayUrl, this.$store, {
-        token: this.clientToken,
-        sourceId: this.userId,
+        userId: this.userId,
       });
       this.$store.commit("setSocketClient", socketClient);
       await this.$store.dispatch("connectSocket");

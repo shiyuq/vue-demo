@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import moment from 'moment'
+// import moment from 'moment'
 import qs from 'qs'
 
 class SocketClient {
@@ -71,8 +71,8 @@ class SocketClient {
     await this.$store.dispatch('sendConnected')
     this.connecting = false
     this.connected = true
-    this.$store.commit('setHasConnectedServer', true)
-    this.$store.commit('setConnectedTimestamp', moment.utc().toISOString())
+    // this.$store.commit('setHasConnectedServer', true)
+    // this.$store.commit('setConnectedTimestamp', moment.utc().toISOString())
     console.log(`Event[connect]: with socket id [${this.socket.id}]`)
   }
 
