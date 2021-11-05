@@ -37,6 +37,7 @@ class SocketClient {
     this.socket = io(this.targetUrl)
 
     this.socket.on('connect', () => { this.socketConnectEventHandler() })
+    this.socket.on('connected', (data) => { console.log('data11111111 :>> ', data); })
     this.socket.on('disconnect', (reason) => { this.socketDisconnectEventHandler(reason) })
     this.socket.on('reconnect', (attemptNumber) => { this.socketReconnectEventHandler(attemptNumber) })
 
@@ -160,10 +161,7 @@ class SocketClient {
   async sendConnected (request = {}) {
     if (this.socket !== null) {
       console.log('Event[connected] to server')
-      this.socket.emit('connected', request, response => {
-        console.log(`Event[connected] with response: ${JSON.stringify(response)}`)
-        // TODO: add business logic
-      })
+      this.socket.emit('connected', request)
     }
   }
 

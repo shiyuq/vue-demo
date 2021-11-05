@@ -8,6 +8,18 @@ const getUserInfo = async(params) => {
   return data
 }
 
+const getUserList = async(params) => {
+  const { data } = await createInstance(baseUrl).post('/user/user-list', params)
+  return data
+}
+
+const userLogin = async (params) => {
+  const { data } = await createInstance(baseUrl).post('/user/user-login', params)
+  return data
+}
+
 export default {
   getUserInfo,
+  getUserList,
+  userLogin
 }

@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 const okayHttpStatuses = [
   200,
@@ -22,7 +23,9 @@ const errorParser = async response => {
 
 export const createInstance = baseUrl => {
   const timeout = 10 * 1000
-  const headers = {}
+  const headers = {
+    token: Cookies.get('token') || ''
+  }
   const instance = axios.create({
     baseURL: baseUrl,
     timeout,

@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 import userService from "../api/user-service";
 
 export default {
@@ -22,8 +23,11 @@ export default {
   },
   methods: {
     async getUserInfo(params) {
-      const res = await userService.getUserInfo(params);
-      console.log("res11111111111 :>> ", res);
+      const { data = null } = await userService.getUserInfo(params);
+      if (data) {
+        Cookies.set("token", data.token);
+        localStorage.setItem("userInfo", JSON.stringify(data.userInfo));
+      }
     },
   },
 };

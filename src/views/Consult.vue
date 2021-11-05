@@ -1,35 +1,42 @@
 <template>
-  <div>
-    <div>发送信息</div>
-    <input placeholder="请输入要发送的信息" />
-    <button @click="postMessage">发送</button>
+  <div class="chat">
+    <LeftMenu class="leftMenu"></LeftMenu>
+    <ChatPanel class="chatPanel"></ChatPanel>
   </div>
 </template>
 
 <script>
-
+import LeftMenu from "./chat/LeftMenu.vue";
+import ChatPanel from "./chat/ChatPanel.vue";
 export default {
+  name: "consult",
+  components: {
+    LeftMenu,
+    ChatPanel,
+  },
   data() {
-    return {
-      socket: null,
-      messList: [],
-    };
+    return {};
   },
-  created() {
-  },
-  methods: {
-    postMessage() {
-      this.socket.emit("recive message", {
-        message: "123",
-        time: new Date(),
-      });
-      this.messList.push({
-        message: "123",
-        time: new Date(),
-      });
-    },
-  },
+  methods: {},
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.chat {
+  display: flex;
+  width: 1000px;
+  margin: 0 auto;
+  background-color: pink;
+  border-radius: 4px;
+  height: calc(100vh - 200px);
+}
+
+.leftMenu {
+  width: 150px;
+  border-right: 1px solid burlywood;
+}
+
+.chatPanel {
+  width: calc(100% - 150px);
+}
+</style>
