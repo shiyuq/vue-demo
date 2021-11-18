@@ -9,28 +9,58 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     userId: '',
-    messages: [],
+    messages: {},
     socketClient: null,
     users: [],
-    selectedUser: ''
+    selectedUser: '',
+    unReadMessages: {}
   },
   mutations: {
     setUserId (state, userId) {
       state.userId = userId
     },
     initMessages (state) {
-      state.messages = []
+      state.messages = {}
     },
     setSocketClient (state, socketClient) {
       state.socketClient = socketClient
     },
     setSelectedUser (state, userId) {
       state.selectedUser = userId
-      state.messages = []
+      if (state.unReadMessages[userId]) {
+        const unReadMessages = state.unReadMessages
+        state.messages[userId] = [...(state.messages[userId] || []), ...unReadMessages[userId]]
+        delete unReadMessages[userId]
+        state.unReadMessages = unReadMessages
+      } else {
+        state.messages[userId] = state.messages[userId] || []
+      }
     },
     appendNewMessage (state, message) {
-      state.messages.push(message)
+      if (message.sourceUser === state.userId) {
+        state.messages[message.targetUser].push(message)
+      } else {
+        // 收到的消息并不是当前选中的用户，需要加入未读消息提醒
+        if (message.sourceUser !== state.selectedUser) {
+          if (!state.unReadMessages[message.sourceUser]) {
+            state.unReadMessages[message.sourceUser] = [message]
+          } else {
+            state.unReadMessages[message.sourceUser].push(message)
+          }
+          state.unReadMessages = Object.assign({}, state.unReadMessages)
+          return
+        }
+        if (!state.messages[message.sourceUser]) {
+          state.messages[message.sourceUser] = [message]
+        } else {
+          state.messages[message.sourceUser].push(message)
+        }
+      }
+      state.messages = Object.assign({}, state.messages)
     },
+    getConversationMessages (state, message) {
+      state.unReadMessages = message
+    }
   },
   actions: {
     async connectSocket ({ state }) {
@@ -61,6 +91,9 @@ export default new Vuex.Store({
     async receiveMessage ({ commit }, message) {
       commit('appendNewMessage', message)
     },
+    async getConversationMessages ({ commit }, message) {
+      commit('getConversationMessages', message)
+    }
   },
   modules: {
   }

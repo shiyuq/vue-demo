@@ -37,7 +37,7 @@ class SocketClient {
     this.socket = io(this.targetUrl)
 
     this.socket.on('connect', () => { this.socketConnectEventHandler() })
-    this.socket.on('connected', (data) => { console.log('data11111111 :>> ', data); })
+    this.socket.on('connected', () => {})
     this.socket.on('disconnect', (reason) => { this.socketDisconnectEventHandler(reason) })
     this.socket.on('reconnect', (attemptNumber) => { this.socketReconnectEventHandler(attemptNumber) })
 
@@ -53,6 +53,7 @@ class SocketClient {
 
     // from server side
     this.socket.on('messageToUser', (message) => { this.messageToUserEventHandler(message) })
+    this.socket.on('getConversationMessages', (message) => { this.getConversationMessagesEventHandler(message) })
     this.socket.on('endConversationBySystem', (message) => { this.endConversationBySystemEventHandler(message) })
     this.socket.on('eventToUser', (message) => { this.eventToUserHandler(message) })
   }
@@ -65,7 +66,6 @@ class SocketClient {
       this.socket = null
     }
     this.reset()
-    this.$store.commit('setHasConnectedServer', false)
   }
 
   async socketConnectEventHandler () {
@@ -83,7 +83,7 @@ class SocketClient {
       case 'io client disconnect': {
         // Possible scenarios:
         // 1. client side execute disconnect, this.socket.close()
-        this.$store.dispatch('disconnectSocketStatus')
+        // this.$store.dispatch('disconnectSocketStatus')
         break
       }
       case 'transport close': {
@@ -95,7 +95,7 @@ class SocketClient {
           // do nothing, then it will reconnect automatically
         } else {
           // server close connection while connecting, so this is invalid token
-          this.$store.commit('setConnectionError', '请确认您使用了合法的Client Token')
+          // this.$store.commit('setConnectionError', '请确认您使用了合法的Client Token')
           this.disconnect()
         }
         break
@@ -103,7 +103,7 @@ class SocketClient {
       case 'io server disconnect': {
         // Possible scenarios:
         // 1. Server disconnect this socket with disconnect(true) or disconnect(false) method after connection is established
-        this.$store.dispatch('disconnectSocketStatus')
+        // this.$store.dispatch('disconnectSocketStatus')
         this.disconnect()
         break
       }
@@ -115,6 +115,7 @@ class SocketClient {
       }
       default: {
         // will reconnect automatically
+        this.disconnect()
         break
       }
     }
@@ -132,6 +133,11 @@ class SocketClient {
     // message sourceType: user, agent, system
     console.log(`Event[messageToUser] from server: ${JSON.stringify(message)}`)
     this.$store.dispatch('receiveMessage', message)
+  }
+
+  async getConversationMessagesEventHandler (message) {
+    console.log(`Event[getConversationMessages] from server: ${JSON.stringify(message)}`)
+    this.$store.dispatch('getConversationMessages', message)
   }
 
   async endConversationBySystemEventHandler (message) {

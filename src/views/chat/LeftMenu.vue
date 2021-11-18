@@ -6,7 +6,12 @@
       :class="user.id === selectedUser ? 'selectedUser' : 'user'"
       @click="setCurrentUser(user)"
     >
-      {{ user.name }}
+      <span v-if="unReadMessages[user.id]">
+        <el-badge :value="unReadMessages[user.id].length" class="item">
+          {{ user.name }}
+        </el-badge>
+      </span>
+      <span v-else>{{ user.name }}</span>
     </div>
   </div>
 </template>
@@ -21,6 +26,14 @@ export default {
     selectedUser() {
       return this.$store.state.selectedUser;
     },
+    unReadMessages() {
+      return this.$store.state.unReadMessages;
+    },
+  },
+  created() {
+    if (this.selectedUser) {
+      this.setCurrentUser(this.selectedUser);
+    }
   },
   methods: {
     setCurrentUser(user) {
@@ -35,6 +48,8 @@ export default {
   display: flex;
   flex-direction: column;
   height: calc(100%);
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .user {

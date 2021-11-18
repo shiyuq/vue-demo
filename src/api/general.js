@@ -22,7 +22,7 @@ const errorParser = async response => {
 }
 
 export const createInstance = baseUrl => {
-  const timeout = 10 * 1000
+  const timeout = 5 * 1000
   const headers = {
     token: Cookies.get('token') || ''
   }
