@@ -27,6 +27,10 @@ export default {
       if (data) {
         Cookies.set("token", data.token);
         localStorage.setItem("userInfo", JSON.stringify(data.userInfo));
+        this.$message.success("登录成功");
+        this.$router.push("/");
+      } else {
+        this.$message.error("授权登录失败");
       }
     },
   },
