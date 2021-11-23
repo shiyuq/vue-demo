@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       userInfo: null,
-      gatewayUrl: "http://142.192.173.195:6001",
+      gatewayUrl: "http://42.192.173.195:6001",
     };
   },
   created() {

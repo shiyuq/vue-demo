@@ -22,7 +22,7 @@ import Cookies from "js-cookie";
 import userService from "../api/user-service";
 const oauthUri = "https://github.com/login/oauth/authorize";
 const clientId = "569e7664d7a71d0ed046";
-const redirectUri = "http://142.192.173.195:5001/github/auth";
+const redirectUri = "http://42.192.173.195:5001/github/auth";
 
 export default {
   name: "about",
