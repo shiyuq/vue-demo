@@ -6,13 +6,15 @@ import {
   Form,
   FormItem,
   Input,
-  Message
+  Message,
+  Badge
 } from 'element-ui'
 
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
+Vue.use(Badge)
 Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
 

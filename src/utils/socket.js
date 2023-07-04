@@ -1,4 +1,4 @@
-import io from 'socket.io-client'
+import { io } from 'socket.io-client'
 // import moment from 'moment'
 import qs from 'qs'
 
@@ -101,9 +101,6 @@ class SocketClient {
         break
       }
       case 'io server disconnect': {
-        // Possible scenarios:
-        // 1. Server disconnect this socket with disconnect(true) or disconnect(false) method after connection is established
-        // this.$store.dispatch('disconnectSocketStatus')
         this.disconnect()
         break
       }

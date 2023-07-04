@@ -58,6 +58,23 @@ export default new Vuex.Store({
       }
       state.messages = Object.assign({}, state.messages)
     },
+    appendGroupMessage (state, message) {
+      if (message.targetUser !== state.selectedUser) {
+        if (!state.unReadMessages[message.targetUser]) {
+          state.unReadMessages[message.targetUser] = [message]
+        } else {
+          state.unReadMessages[message.targetUser].push(message)
+        }
+        state.unReadMessages = Object.assign({}, state.unReadMessages)
+        return;
+      }
+      if (!state.messages[message.targetUser]) {
+        state.messages[message.targetUser] = [message]
+      } else {
+        state.messages[message.targetUser].push(message)
+      }
+      state.messages = Object.assign({}, state.messages)
+    },
     getConversationMessages (state, message) {
       state.unReadMessages = message
     }
@@ -89,7 +106,11 @@ export default new Vuex.Store({
       state.socketClient.sendMessage(request)
     },
     async receiveMessage ({ commit }, message) {
-      commit('appendNewMessage', message)
+      if (message && message.type === 'groupChat') {
+        commit('appendGroupMessage', message)
+      } else {
+        commit('appendNewMessage', message)
+      }
     },
     async getConversationMessages ({ commit }, message) {
       commit('getConversationMessages', message)
